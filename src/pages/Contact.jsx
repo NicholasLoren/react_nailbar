@@ -46,13 +46,31 @@ export default function Contact() {
     if (honeypot) { setStatus('success'); return } // silent bot reject
     setStatus('sending'); setErrorMsg('')
     try {
-      await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
-        from_name: form.name, from_email: form.email, phone: form.phone,
-        service: form.service, preferred_date: form.date, preferred_time: form.time, message: form.message,
-      }, EMAILJS_PUBLIC_KEY)
-      setStatus('success'); setForm(initialForm)
-    } catch {
-      setStatus('error'); setErrorMsg('Something went wrong. Please try again or call us directly.')
+      const result = await emailjs.send(
+        EMAILJS_SERVICE_ID,
+        EMAILJS_TEMPLATE_ID,
+        {
+          from_name: form.name,
+          from_email: form.email,
+          phone: form.phone,
+          service: form.service,
+          preferred_date: form.date,
+          preferred_time: form.time,
+          message: form.message,
+        },
+        { publicKey: EMAILJS_PUBLIC_KEY }
+      )
+      console.log('EmailJS success:', result)
+      setStatus('success')
+      setForm(initialForm)
+    } catch (err) {
+      console.error('EmailJS error:', err)
+      setStatus('error')
+      setErrorMsg(
+        err?.text
+          ? `EmailJS: ${err.text}`
+          : 'Something went wrong. Please try again or call us directly.'
+      )
     }
   }
 
