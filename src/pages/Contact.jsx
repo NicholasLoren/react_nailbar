@@ -52,6 +52,7 @@ export default function Contact() {
         {
           from_name: form.name,
           from_email: form.email,
+          reply_to: form.email,
           phone: form.phone,
           service: form.service,
           preferred_date: form.date,
