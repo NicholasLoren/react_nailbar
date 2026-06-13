@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
-import { Helmet } from 'react-helmet-async'
 import HeroSlideshow from '../components/HeroSlideshow'
+import Seo from '../components/Seo'
 import { useInView } from '../hooks/useInView'
 
 // ─── Marquee strip ───────────────────────────────────────────────
@@ -71,10 +71,11 @@ export default function Home() {
 
   return (
     <>
-      <Helmet>
-        <title>Home — The Nail Bar UG</title>
-        <meta name="description" content="Experience luxury nail care at The Nail Bar UG. Professional manicures, pedicures, acrylic nails, and beauty treatments in Kampala." />
-      </Helmet>
+      <Seo
+        title="Luxury Nail Salon in Kampala"
+        description="Experience luxury nail care at The Nail Bar UG. Professional manicures, pedicures, acrylic nails, gel nails, and beauty treatments in Kampala, Uganda."
+        path="/"
+      />
 
       {/* ── HERO ──────────────────────────────────────────────────── */}
       <section className="relative min-h-screen flex items-center overflow-hidden" style={{ background: 'var(--bg)' }}>

@@ -1,5 +1,5 @@
-import { Helmet } from 'react-helmet-async'
 import { Link } from 'react-router-dom'
+import Seo from '../components/Seo'
 import { useInView } from '../hooks/useInView'
 import { services } from '../data/services'
 
@@ -56,10 +56,12 @@ export default function Services() {
 
   return (
     <>
-      <Helmet>
-        <title>Services — The Nail Bar UG</title>
-        <meta name="description" content="Discover our luxury nail services: manicures, pedicures, acrylic nails, gel builder nails, ombre nails, eyelashes, and eyebrow shaping." />
-      </Helmet>
+      <Seo
+        title="Nail Services — Manicures, Pedicures, Acrylics & More"
+        description="Discover our full range of luxury nail services in Kampala: manicures, pedicures, acrylic nails, gel builder nails, ombre nails, eyelash extensions, and eyebrow shaping."
+        path="/services"
+        image="https://thenailbarug.com/images/31.jpg"
+      />
 
       {/* ── HERO ──────────────────────────────────────────────────── */}
       <section className="relative pt-40 pb-20 overflow-hidden" style={{ background: 'var(--bg)' }}>

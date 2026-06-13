@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Helmet } from 'react-helmet-async'
+import Seo from '../components/Seo'
 import emailjs from '@emailjs/browser'
 import { useInView } from '../hooks/useInView'
 
@@ -81,10 +81,11 @@ export default function Contact() {
 
   return (
     <>
-      <Helmet>
-        <title>Contact Us — The Nail Bar UG</title>
-        <meta name="description" content="Get in touch with The Nail Bar UG. Book your appointment for luxury nail services in Kampala. Call +256 772 054 361." />
-      </Helmet>
+      <Seo
+        title="Book an Appointment"
+        description="Book your nail appointment at The Nail Bar UG in Kampala. Call +256 772 054 361 or fill out our online form. Open 7 days a week, 9 AM – 8 PM."
+        path="/contact"
+      />
 
       {/* ── HERO ──────────────────────────────────────────────────── */}
       <section className="relative pt-40 pb-20 overflow-hidden" style={{ background: 'var(--bg)' }}>

@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { Link } from 'react-router-dom'
-import { Helmet } from 'react-helmet-async'
+import Seo from '../components/Seo'
 import { useInView } from '../hooks/useInView'
 import { galleryItems, galleryFilters, instagramGrid } from '../data/gallery'
 
@@ -86,10 +86,12 @@ export default function Gallery() {
 
   return (
     <>
-      <Helmet>
-        <title>Gallery — The Nail Bar UG</title>
-        <meta name="description" content="Explore our portfolio of stunning nail art, manicures, pedicures, and beauty work at The Nail Bar UG." />
-      </Helmet>
+      <Seo
+        title="Gallery — Nail Art Portfolio"
+        description="Browse our portfolio of stunning nail art, gel manicures, acrylic extensions, pedicures, lash extensions, and beauty work at The Nail Bar UG in Kampala."
+        path="/gallery"
+        image="https://thenailbarug.com/images/12.jpg"
+      />
 
       {/* ── HERO ──────────────────────────────────────────────────── */}
       <section className="relative pt-40 pb-20 overflow-hidden" style={{ background: 'var(--bg)' }}>

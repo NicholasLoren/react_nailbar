@@ -1,5 +1,5 @@
-import { Helmet } from 'react-helmet-async'
 import { Link } from 'react-router-dom'
+import Seo from '../components/Seo'
 import { useInView } from '../hooks/useInView'
 import { testimonials } from '../data/testimonials'
 
@@ -74,10 +74,12 @@ export default function About() {
 
   return (
     <>
-      <Helmet>
-        <title>About Us — The Nail Bar UG</title>
-        <meta name="description" content="Learn about The Nail Bar UG, our story, values and why we're Kampala's favourite nail salon." />
-      </Helmet>
+      <Seo
+        title="About Us"
+        description="Learn about The Nail Bar UG — our story, values, and why we're Kampala's favourite nail salon for luxury manicures, pedicures, and nail art."
+        path="/about"
+        image="https://thenailbarug.com/images/5.jpg"
+      />
 
       {/* ── HERO ──────────────────────────────────────────────────── */}
       <section className="relative pt-40 pb-28 overflow-hidden" style={{ background: 'var(--bg)' }}>
