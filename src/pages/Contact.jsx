@@ -113,89 +113,134 @@ export default function Contact() {
               <h2 className="font-display text-3xl mb-8" style={{ color: 'var(--text-1)' }}>Send a Message</h2>
 
               {status === 'success' ? (
-                <div className="text-center py-20">
-                  <div className="w-20 h-20 mx-auto rounded-full flex items-center justify-center mb-6" style={{ background: 'var(--accent-muted)' }}>
-                    <svg className="h-9 w-9" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5} style={{ color: 'var(--accent)' }}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                    </svg>
+                /* ── Success state ── */
+                <div className="text-center py-20 animate-fade-in">
+                  <div className="relative w-24 h-24 mx-auto mb-8">
+                    {/* Pulsing ring */}
+                    <span className="absolute inset-0 rounded-full animate-ping opacity-20" style={{ background: 'var(--accent)' }} />
+                    <div className="relative w-24 h-24 rounded-full flex items-center justify-center" style={{ background: 'var(--accent-muted)' }}>
+                      <svg className="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5} style={{ color: 'var(--accent)' }}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                      </svg>
+                    </div>
                   </div>
-                  <h3 className="font-display text-3xl mb-3" style={{ color: 'var(--text-1)' }}>Message Sent</h3>
-                  <p className="text-sm mb-8" style={{ color: 'var(--text-2)' }}>We'll confirm your appointment within 24 hours. See you soon!</p>
-                  <button onClick={() => setStatus('idle')} className="px-6 py-3 rounded-full text-white text-sm font-semibold" style={{ background: 'var(--accent)' }}>
-                    Send Another
+                  <h3 className="font-display text-4xl mb-3" style={{ color: 'var(--text-1)' }}>Message Sent!</h3>
+                  <p className="text-sm leading-relaxed mb-8 max-w-xs mx-auto" style={{ color: 'var(--text-2)' }}>
+                    Thank you! We'll confirm your appointment within 24 hours. See you soon.
+                  </p>
+                  <button
+                    onClick={() => setStatus('idle')}
+                    className="px-7 py-3 rounded-full text-sm font-semibold border transition-all duration-200 hover:scale-105"
+                    style={{ borderColor: 'var(--border)', color: 'var(--text-2)' }}
+                  >
+                    Send Another Message
                   </button>
                 </div>
               ) : (
-                <form onSubmit={handleSubmit} noValidate>
-                  {/* Honeypot */}
-                  <div className="hp-field" aria-hidden="true">
-                    <label htmlFor="hp_website">Website</label>
-                    <input type="text" id="hp_website" name="hp_website" tabIndex={-1} autoComplete="off"
-                      value={honeypot} onChange={(e) => setHoneypot(e.target.value)} />
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                    {[
-                      { id: 'name', label: 'Full Name', type: 'text', placeholder: 'Jane Doe', required: true },
-                      { id: 'email', label: 'Email Address', type: 'email', placeholder: 'jane@example.com', required: true },
-                      { id: 'phone', label: 'Phone Number', type: 'tel', placeholder: '+256 700 000 000' },
-                    ].map(({ id, label, type, placeholder, required }) => (
-                      <div key={id} className={id === 'phone' ? '' : ''}>
-                        <label htmlFor={id} className="block text-xs font-medium tracking-wide mb-2 uppercase" style={labelStyle}>
-                          {label} {required && <span style={{ color: 'var(--accent)' }}>*</span>}
-                        </label>
-                        <input id={id} name={id} type={type} required={required} placeholder={placeholder}
-                          className={field} style={fieldStyle} value={form[id]} onChange={handleChange} />
+                /* ── Form ── */
+                <div className="relative">
+                  {/* Sending overlay */}
+                  {status === 'sending' && (
+                    <div className="absolute inset-0 z-10 rounded-2xl flex flex-col items-center justify-center gap-5"
+                      style={{ background: 'var(--bg)', opacity: 0.95 }}>
+                      {/* Orbital spinner */}
+                      <div className="relative w-16 h-16">
+                        <svg className="w-16 h-16 animate-spin" viewBox="0 0 64 64" fill="none">
+                          <circle cx="32" cy="32" r="28" stroke="var(--border)" strokeWidth="4" />
+                          <path d="M32 4a28 28 0 0 1 28 28" stroke="var(--accent)" strokeWidth="4" strokeLinecap="round" />
+                        </svg>
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <div className="w-2 h-2 rounded-full" style={{ background: 'var(--accent)' }} />
+                        </div>
                       </div>
-                    ))}
-
-                    <div>
-                      <label htmlFor="service" className="block text-xs font-medium tracking-wide mb-2 uppercase" style={labelStyle}>Service</label>
-                      <select id="service" name="service" className={field} style={fieldStyle} value={form.service} onChange={handleChange}>
-                        <option value="">Select…</option>
-                        {serviceOptions.map((s) => <option key={s} value={s}>{s}</option>)}
-                      </select>
+                      <div className="text-center">
+                        <p className="font-display text-xl mb-1" style={{ color: 'var(--text-1)' }}>Sending…</p>
+                        <p className="text-xs tracking-widest uppercase" style={{ color: 'var(--text-3)' }}>Please wait a moment</p>
+                      </div>
                     </div>
-
-                    <div>
-                      <label htmlFor="date" className="block text-xs font-medium tracking-wide mb-2 uppercase" style={labelStyle}>Preferred Date</label>
-                      <input id="date" name="date" type="date" min={todayDate} className={field} style={fieldStyle} value={form.date} onChange={handleChange} />
-                    </div>
-
-                    <div>
-                      <label htmlFor="time" className="block text-xs font-medium tracking-wide mb-2 uppercase" style={labelStyle}>Preferred Time</label>
-                      <select id="time" name="time" className={field} style={fieldStyle} value={form.time} onChange={handleChange}>
-                        <option value="">Select…</option>
-                        {timeOptions.map((t) => <option key={t} value={t}>{t}</option>)}
-                      </select>
-                    </div>
-
-                    <div className="sm:col-span-2">
-                      <label htmlFor="message" className="block text-xs font-medium tracking-wide mb-2 uppercase" style={labelStyle}>
-                        Message <span style={{ color: 'var(--accent)' }}>*</span>
-                      </label>
-                      <textarea id="message" name="message" required rows={5}
-                        placeholder="Tell us what you have in mind…"
-                        className={field + ' resize-none'} style={fieldStyle}
-                        value={form.message} onChange={handleChange} />
-                    </div>
-                  </div>
-
-                  {status === 'error' && (
-                    <p className="mt-5 text-sm px-4 py-3 rounded-xl" style={{ background: 'rgba(220,38,38,0.08)', color: '#ef4444' }}>{errorMsg}</p>
                   )}
 
-                  <button type="submit" disabled={status === 'sending'}
-                    className="mt-7 w-full py-4 rounded-xl text-white text-sm font-semibold tracking-wide flex items-center justify-center gap-2 transition-all duration-300 hover:scale-[1.02] active:scale-100 disabled:opacity-60"
-                    style={{ background: 'var(--accent)' }}>
-                    {status === 'sending' ? (
-                      <><svg className="h-5 w-5 animate-spin" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
-                      </svg>Sending…</>
-                    ) : 'Send Message'}
-                  </button>
-                </form>
+                  <form
+                    onSubmit={handleSubmit}
+                    noValidate
+                    className="transition-opacity duration-300"
+                    style={{ opacity: status === 'sending' ? 0.15 : 1, pointerEvents: status === 'sending' ? 'none' : 'auto' }}
+                  >
+                    {/* Honeypot */}
+                    <div className="hp-field" aria-hidden="true">
+                      <label htmlFor="hp_website">Website</label>
+                      <input type="text" id="hp_website" name="hp_website" tabIndex={-1} autoComplete="off"
+                        value={honeypot} onChange={(e) => setHoneypot(e.target.value)} />
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                      {[
+                        { id: 'name', label: 'Full Name', type: 'text', placeholder: 'Jane Doe', required: true },
+                        { id: 'email', label: 'Email Address', type: 'email', placeholder: 'jane@example.com', required: true },
+                        { id: 'phone', label: 'Phone Number', type: 'tel', placeholder: '+256 700 000 000' },
+                      ].map(({ id, label, type, placeholder, required }) => (
+                        <div key={id}>
+                          <label htmlFor={id} className="block text-xs font-medium tracking-wide mb-2 uppercase" style={labelStyle}>
+                            {label} {required && <span style={{ color: 'var(--accent)' }}>*</span>}
+                          </label>
+                          <input id={id} name={id} type={type} required={required} placeholder={placeholder}
+                            className={field} style={fieldStyle} value={form[id]} onChange={handleChange} />
+                        </div>
+                      ))}
+
+                      <div>
+                        <label htmlFor="service" className="block text-xs font-medium tracking-wide mb-2 uppercase" style={labelStyle}>Service</label>
+                        <select id="service" name="service" className={field} style={fieldStyle} value={form.service} onChange={handleChange}>
+                          <option value="">Select…</option>
+                          {serviceOptions.map((s) => <option key={s} value={s}>{s}</option>)}
+                        </select>
+                      </div>
+
+                      <div>
+                        <label htmlFor="date" className="block text-xs font-medium tracking-wide mb-2 uppercase" style={labelStyle}>Preferred Date</label>
+                        <input id="date" name="date" type="date" min={todayDate} className={field} style={fieldStyle} value={form.date} onChange={handleChange} />
+                      </div>
+
+                      <div>
+                        <label htmlFor="time" className="block text-xs font-medium tracking-wide mb-2 uppercase" style={labelStyle}>Preferred Time</label>
+                        <select id="time" name="time" className={field} style={fieldStyle} value={form.time} onChange={handleChange}>
+                          <option value="">Select…</option>
+                          {timeOptions.map((t) => <option key={t} value={t}>{t}</option>)}
+                        </select>
+                      </div>
+
+                      <div className="sm:col-span-2">
+                        <label htmlFor="message" className="block text-xs font-medium tracking-wide mb-2 uppercase" style={labelStyle}>
+                          Message <span style={{ color: 'var(--accent)' }}>*</span>
+                        </label>
+                        <textarea id="message" name="message" required rows={5}
+                          placeholder="Tell us what you have in mind…"
+                          className={field + ' resize-none'} style={fieldStyle}
+                          value={form.message} onChange={handleChange} />
+                      </div>
+                    </div>
+
+                    {status === 'error' && (
+                      <div className="mt-5 flex items-start gap-3 px-4 py-3 rounded-xl" style={{ background: 'rgba(220,38,38,0.08)' }}>
+                        <svg className="h-4 w-4 mt-0.5 shrink-0 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+                        </svg>
+                        <p className="text-sm text-red-500">{errorMsg}</p>
+                      </div>
+                    )}
+
+                    <button
+                      type="submit"
+                      className="mt-7 w-full py-4 rounded-xl text-white text-sm font-semibold tracking-wide flex items-center justify-center gap-2.5 transition-all duration-300 hover:scale-[1.02] hover:shadow-lg active:scale-100"
+                      style={{ background: 'var(--accent)', boxShadow: '0 4px 20px rgba(196,154,138,0.3)' }}
+                    >
+                      <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
+                      </svg>
+                      Send Message
+                    </button>
+                  </form>
+                </div>
               )}
             </div>
 
