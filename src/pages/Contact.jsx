@@ -167,10 +167,16 @@ export default function Contact() {
                     style={{ opacity: status === 'sending' ? 0.15 : 1, pointerEvents: status === 'sending' ? 'none' : 'auto' }}
                   >
                     {/* Honeypot */}
-                    <div className="hp-field" aria-hidden="true">
-                      <label htmlFor="hp_website">Website</label>
-                      <input type="text" id="hp_website" name="hp_website" tabIndex={-1} autoComplete="off"
-                        value={honeypot} onChange={(e) => setHoneypot(e.target.value)} />
+                    {/* Honeypot — moved off-screen via inline style so autofill ignores it */}
+                    <div style={{ position: 'absolute', left: '-9999px', width: '1px', height: '1px', overflow: 'hidden' }} aria-hidden="true">
+                      <input
+                        type="text"
+                        name="b_address"
+                        tabIndex={-1}
+                        autoComplete="nope"
+                        value={honeypot}
+                        onChange={(e) => setHoneypot(e.target.value)}
+                      />
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
