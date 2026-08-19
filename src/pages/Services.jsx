@@ -1,7 +1,26 @@
 import { Link } from 'react-router-dom'
+import { Helmet } from 'react-helmet-async'
 import Seo from '../components/Seo'
 import { useInView } from '../hooks/useInView'
 import { services } from '../data/services'
+import { pageSeo } from '../data/seo'
+
+const servicesSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  itemListElement: services.map((s, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    item: {
+      '@type': 'Service',
+      name: s.title,
+      description: s.description,
+      provider: { '@type': 'NailSalon', name: 'The Nail Bar UG' },
+      areaServed: { '@type': 'City', name: 'Kampala' },
+      image: `https://thenailbarug.com${s.image}`,
+    },
+  })),
+}
 
 function SectionLabel({ children }) {
   return <p className="text-xs tracking-[0.25em] uppercase font-medium mb-6" style={{ color: 'var(--accent)' }}>{children}</p>
@@ -45,7 +64,7 @@ function ServiceRow({ title, subtitle, description, features, image, reverse, in
 }
 
 const pricingFeatures = [
-  { title: 'Transparent Pricing', desc: 'No hidden fees — all prices clearly communicated before we begin.' },
+  { title: 'Transparent Pricing', desc: 'No hidden fees: all prices clearly communicated before we begin.' },
   { title: 'Package Deals', desc: 'Save more with combo bundles. Mani + pedi packages for the full treat.' },
   { title: 'Loyalty Rewards', desc: 'Earn points with every visit, redeemable for free services and upgrades.' },
 ]
@@ -56,12 +75,10 @@ export default function Services() {
 
   return (
     <>
-      <Seo
-        title="Nail Services — Manicures, Pedicures, Acrylics & More"
-        description="Discover our full range of luxury nail services in Kampala: manicures, pedicures, acrylic nails, gel builder nails, ombre nails, eyelash extensions, and eyebrow shaping."
-        path="/services"
-        image="https://thenailbarug.com/images/31.jpg"
-      />
+      <Seo path="/services" {...pageSeo['/services']} />
+      <Helmet>
+        <script type="application/ld+json">{JSON.stringify(servicesSchema)}</script>
+      </Helmet>
 
       {/* ── HERO ──────────────────────────────────────────────────── */}
       <section className="relative pt-40 pb-20 overflow-hidden" style={{ background: 'var(--bg)' }}>
@@ -76,7 +93,7 @@ export default function Services() {
             Our<br /><em className="text-gradient not-italic">Services</em>
           </h1>
           <p className={`reveal delay-200 ${heroInView ? 'in-view' : ''} text-lg max-w-xl leading-relaxed`} style={{ color: 'var(--text-2)' }}>
-            From classic elegance to bold artistry — a complete range of luxury nail and beauty services tailored entirely to you.
+            From classic elegance to bold artistry, a complete range of luxury nail and beauty services tailored entirely to you.
           </p>
         </div>
       </section>

@@ -10,8 +10,8 @@ const localBusinessSchema = {
   '@type': 'NailSalon',
   name: 'The Nail Bar UG',
   url: 'https://thenailbarug.com',
-  logo: 'https://thenailbarug.com/images/logo.png',
-  image: 'https://thenailbarug.com/images/7.jpg',
+  logo: 'https://thenailbarug.com/images/nailbar_logo.png',
+  image: 'https://thenailbarug.com/images/gold-charm-nude-nails-01.jpg',
   description:
     "Kampala's premier nail salon offering luxury manicures, pedicures, acrylic nails, gel nails, lash extensions, and eyebrow shaping at The Cube, First Floor.",
   telephone: '+256772054361',
@@ -41,6 +41,10 @@ const localBusinessSchema = {
   priceRange: '$$',
   currenciesAccepted: 'UGX',
   paymentAccepted: 'Cash, Mobile Money',
+  areaServed: {
+    '@type': 'City',
+    name: 'Kampala',
+  },
   sameAs: [
     'https://www.instagram.com/the_nail_bar_ug',
     'https://www.tiktok.com/@thenailbarug1',

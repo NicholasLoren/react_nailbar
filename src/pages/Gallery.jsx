@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom'
 import Seo from '../components/Seo'
 import { useInView } from '../hooks/useInView'
 import { galleryItems, galleryFilters, instagramGrid } from '../data/gallery'
+import { videoClips } from '../data/videos'
+import { pageSeo } from '../data/seo'
 
 // ─── Lightbox ────────────────────────────────────────────────────
 function Lightbox({ items, startIndex, onClose }) {
@@ -54,6 +56,107 @@ function Lightbox({ items, startIndex, onClose }) {
   )
 }
 
+// ─── Video lightbox ──────────────────────────────────────────────
+function VideoLightbox({ clips, startIndex, onClose }) {
+  const [current, setCurrent] = useState(startIndex)
+  const prev = useCallback(() => setCurrent((c) => (c - 1 + clips.length) % clips.length), [clips.length])
+  const next = useCallback(() => setCurrent((c) => (c + 1) % clips.length), [clips.length])
+
+  useEffect(() => {
+    const fn = (e) => {
+      if (e.key === 'Escape') onClose()
+      if (e.key === 'ArrowLeft') prev()
+      if (e.key === 'ArrowRight') next()
+    }
+    document.addEventListener('keydown', fn)
+    document.body.style.overflow = 'hidden'
+    return () => { document.removeEventListener('keydown', fn); document.body.style.overflow = '' }
+  }, [onClose, prev, next])
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: 'rgba(10,8,9,0.96)' }}
+      onClick={onClose} role="dialog" aria-modal="true">
+      <div className="relative" onClick={(e) => e.stopPropagation()}>
+        <video
+          key={clips[current].src}
+          src={clips[current].src}
+          controls
+          autoPlay
+          playsInline
+          className="max-h-[80vh] max-w-[90vw] rounded-2xl shadow-2xl"
+          style={{ aspectRatio: '9/16', background: '#000' }}
+        />
+        <p className="text-center mt-5 text-sm font-display text-white/50">{clips[current].title}</p>
+
+        {/* Prev / Next */}
+        {[{ fn: prev, d: 'M15 19l-7-7 7-7', side: 'left-0 -translate-x-14' }, { fn: next, d: 'M9 5l7 7-7 7', side: 'right-0 translate-x-14' }].map(({ fn, d, side }) => (
+          <button key={d} onClick={fn} className={`absolute top-1/2 -translate-y-1/2 ${side} w-11 h-11 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 hidden sm:flex`}
+            style={{ background: 'rgba(255,255,255,0.08)', color: '#fff', border: '1px solid rgba(255,255,255,0.1)' }}>
+            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d={d} /></svg>
+          </button>
+        ))}
+
+        {/* Counter */}
+        <div className="absolute top-4 right-4 px-3 py-1 rounded-full text-xs font-medium" style={{ background: 'rgba(0,0,0,0.5)', color: 'rgba(255,255,255,0.6)' }}>
+          {current + 1} / {clips.length}
+        </div>
+      </div>
+
+      {/* Close */}
+      <button onClick={onClose} aria-label="Close" className="absolute top-6 right-6 w-10 h-10 rounded-full flex items-center justify-center"
+        style={{ background: 'rgba(255,255,255,0.08)', color: '#fff' }}>
+        <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+  )
+}
+
+// ─── Video card ──────────────────────────────────────────────────
+function VideoCard({ clip, index, onClick }) {
+  const [ref, inView] = useInView()
+
+  return (
+    <button
+      ref={ref}
+      onClick={onClick}
+      aria-label={`Play ${clip.title}`}
+      onMouseEnter={(e) => e.currentTarget.querySelector('video')?.play().catch(() => {})}
+      onMouseLeave={(e) => {
+        const v = e.currentTarget.querySelector('video')
+        if (v) { v.pause(); v.currentTime = 0 }
+      }}
+      className={`reveal-scale ${inView ? 'in-view' : ''} delay-${(index % 4) * 100 + 100} group relative overflow-hidden rounded-2xl img-shine focus:outline-none focus:ring-2 focus:ring-accent w-full`}
+      style={{ aspectRatio: '9/16' }}
+    >
+      <video
+        src={clip.src}
+        muted
+        loop
+        playsInline
+        preload="metadata"
+        className="absolute inset-0 w-full h-full object-cover"
+      />
+      <div className="absolute inset-0 transition-opacity duration-300 opacity-100 group-hover:opacity-0"
+        style={{ background: 'linear-gradient(to top, rgba(10,8,9,0.7) 0%, transparent 50%)' }} />
+
+      {/* Play button */}
+      <div className="absolute inset-0 flex items-center justify-center transition-all duration-300 group-hover:opacity-0 group-hover:scale-90">
+        <div className="w-14 h-14 rounded-full flex items-center justify-center shadow-lg" style={{ background: 'rgba(255,255,255,0.9)' }}>
+          <svg className="h-5 w-5 ml-0.5" fill="currentColor" viewBox="0 0 24 24" style={{ color: 'var(--accent)' }}>
+            <path d="M8 5v14l11-7z" />
+          </svg>
+        </div>
+      </div>
+
+      <div className="absolute bottom-0 left-0 right-0 p-5 transition-opacity duration-300 group-hover:opacity-0">
+        <p className="text-white text-sm font-display">{clip.title}</p>
+      </div>
+    </button>
+  )
+}
+
 // ─── Gallery card ─────────────────────────────────────────────────
 function GalleryCard({ item, index, onClick }) {
   const [ref, inView] = useInView()
@@ -80,18 +183,14 @@ function GalleryCard({ item, index, onClick }) {
 export default function Gallery() {
   const [activeFilter, setActiveFilter] = useState('all')
   const [lightbox, setLightbox] = useState(null)
+  const [videoLightbox, setVideoLightbox] = useState(null)
   const [heroRef, heroInView] = useInView()
 
   const filtered = activeFilter === 'all' ? galleryItems : galleryItems.filter((i) => i.category === activeFilter)
 
   return (
     <>
-      <Seo
-        title="Gallery — Nail Art Portfolio"
-        description="Browse our portfolio of stunning nail art, gel manicures, acrylic extensions, pedicures, lash extensions, and beauty work at The Nail Bar UG in Kampala."
-        path="/gallery"
-        image="https://thenailbarug.com/images/12.jpg"
-      />
+      <Seo path="/gallery" {...pageSeo['/gallery']} />
 
       {/* ── HERO ──────────────────────────────────────────────────── */}
       <section className="relative pt-40 pb-20 overflow-hidden" style={{ background: 'var(--bg)' }}>
@@ -101,7 +200,7 @@ export default function Gallery() {
             Our<br /><em className="text-gradient not-italic">Work</em>
           </h1>
           <p className={`reveal delay-200 ${heroInView ? 'in-view' : ''} text-lg max-w-lg leading-relaxed`} style={{ color: 'var(--text-2)' }}>
-            Browse our portfolio of nail art, extensions, and beauty treatments — each piece a testament to our craft.
+            Browse our portfolio of nail art, extensions, and beauty treatments, each piece a testament to our craft.
           </p>
         </div>
       </section>
@@ -140,6 +239,21 @@ export default function Gallery() {
         </div>
       </section>
 
+      {/* ── VIDEO GALLERY ─────────────────────────────────────────── */}
+      <section className="py-28" style={{ background: 'var(--bg)' }}>
+        <div className="max-w-7xl mx-auto px-6 lg:px-12">
+          <div className="text-center mb-14">
+            <p className="text-xs tracking-[0.25em] uppercase font-medium mb-4" style={{ color: 'var(--accent)' }}>Watch Our Work</p>
+            <h2 className="font-display text-4xl sm:text-5xl" style={{ color: 'var(--text-1)' }}>Nail Art in Motion</h2>
+          </div>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            {videoClips.map((clip, i) => (
+              <VideoCard key={clip.src} clip={clip} index={i} onClick={() => setVideoLightbox(i)} />
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ── INSTAGRAM FEED ────────────────────────────────────────── */}
       <section className="py-28" style={{ background: 'var(--bg)' }}>
         <div className="max-w-7xl mx-auto px-6 lg:px-12">
@@ -156,7 +270,7 @@ export default function Gallery() {
             {instagramGrid.map((src, i) => (
               <a key={i} href="https://www.instagram.com/the_nail_bar_ug" target="_blank" rel="noopener noreferrer"
                 className="aspect-square overflow-hidden rounded-xl img-shine">
-                <img src={src} alt="" className="w-full h-full object-cover hover:scale-110 transition-transform duration-500" loading="lazy" />
+                <img src={src} alt={`Nail art photo ${i + 1} from The Nail Bar UG Instagram`} className="w-full h-full object-cover hover:scale-110 transition-transform duration-500" loading="lazy" />
               </a>
             ))}
           </div>
@@ -179,6 +293,9 @@ export default function Gallery() {
 
       {/* Lightbox */}
       {lightbox && <Lightbox items={lightbox.items} startIndex={lightbox.index} onClose={() => setLightbox(null)} />}
+      {videoLightbox !== null && (
+        <VideoLightbox clips={videoClips} startIndex={videoLightbox} onClose={() => setVideoLightbox(null)} />
+      )}
     </>
   )
 }

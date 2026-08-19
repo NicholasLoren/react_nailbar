@@ -46,9 +46,9 @@ export default function Navigation({ darkMode, setDarkMode }) {
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3 group shrink-0">
             <img
-              src="/images/logo.png"
+              src="/images/nailbar_logo.png"
               alt="The Nail Bar UG"
-              className="h-9 w-auto object-contain dark:brightness-0 dark:invert group-hover:scale-105 transition-transform duration-300"
+              className="h-9 w-auto object-contain group-hover:scale-105 transition-transform duration-300"
             />
             <span className="hidden sm:block font-display text-xl tracking-wide" style={{ color: 'var(--text-1)' }}>
               The Nail Bar <em className="not-italic text-gradient">UG</em>

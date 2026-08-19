@@ -11,7 +11,7 @@ export const services = [
       'Premium polish application',
       'Nail art options',
     ],
-    image: '/images/31.jpg',
+    image: '/images/french-white-gold-floral-02.jpg',
     reverse: false,
   },
   {
@@ -42,7 +42,7 @@ export const services = [
       'Nail art designs',
       'Long-lasting results',
     ],
-    image: '/images/9.jpg',
+    image: '/images/red-french-tip-chrome-03.jpg',
     reverse: false,
   },
   {
@@ -57,7 +57,7 @@ export const services = [
       'Damage protection',
       'Professional application',
     ],
-    image: '/images/29.jpg',
+    image: '/images/white-french-3d-flower-02.jpg',
     reverse: true,
   },
   {
@@ -72,14 +72,14 @@ export const services = [
       'Quick application',
       'Perfect for busy lifestyles',
     ],
-    image: '/images/28.jpg',
+    image: '/images/red-french-tip-chrome-04.jpg',
     reverse: false,
   },
   {
     title: 'Ombre Nails',
     subtitle: 'Gradient Perfection',
     description:
-      "When you think of ombre nails, your mind might jump to the basic nude and white — but there are a lot of different colors to explore. Make it bold or keep it classic.",
+      "When you think of ombre nails, your mind might jump to the basic nude and white, but there are a lot of different colors to explore. Make it bold or keep it classic.",
     features: [
       'Custom color gradients',
       'Nude & white classics',
@@ -87,7 +87,7 @@ export const services = [
       'Smooth transitions',
       'Instagram-worthy results',
     ],
-    image: '/images/8.jpg',
+    image: '/images/white-glitter-french-ombre-02.jpg',
     reverse: true,
   },
 ]

@@ -2,6 +2,8 @@ import { Link } from 'react-router-dom'
 import HeroSlideshow from '../components/HeroSlideshow'
 import Seo from '../components/Seo'
 import { useInView } from '../hooks/useInView'
+import { galleryItems } from '../data/gallery'
+import { pageSeo } from '../data/seo'
 
 // ─── Marquee strip ───────────────────────────────────────────────
 const marqueeItems = ['Manicures', 'Pedicures', 'Acrylic Nails', 'Nail Art', 'Gel Nails', 'Lash Extensions', 'Eyebrow Shaping', 'Ombre Nails']
@@ -52,15 +54,15 @@ function FeaturedServiceCard({ title, subtitle, image, delay }) {
 }
 
 const featuredServices = [
-  { title: 'Manicures', subtitle: 'Beauty Bliss', image: '/images/14.jpg' },
+  { title: 'Manicures', subtitle: 'Beauty Bliss', image: '/images/gold-charm-nude-nails-02.jpg' },
   { title: 'Pedicures', subtitle: 'Glamour Touch', image: '/images/4.jpg' },
-  { title: 'Acrylic Nails', subtitle: 'Luxury Extensions', image: '/images/3.jpg' },
+  { title: 'Acrylic Nails', subtitle: 'Luxury Extensions', image: '/images/red-french-tip-chrome-05.jpg' },
 ]
 
 // ─── Gallery preview ─────────────────────────────────────────────
 const galleryPreview = [
-  '/images/1.jpg', '/images/2.jpg', '/images/6.jpg',
-  '/images/8.jpg', '/images/12.jpg', '/images/15.jpg',
+  '/images/gold-charm-nude-nails-03.jpg', '/images/white-french-3d-flower-03.jpg', '/images/gold-charm-nude-nails-04.jpg',
+  '/images/red-stiletto-3d-flower-nails.jpg', '/images/gold-charm-nude-nails-05.jpg', '/images/gold-charm-nude-nails-social.jpg',
 ]
 
 export default function Home() {
@@ -71,11 +73,7 @@ export default function Home() {
 
   return (
     <>
-      <Seo
-        title="Luxury Nail Salon in Kampala"
-        description="Experience luxury nail care at The Nail Bar UG. Professional manicures, pedicures, acrylic nails, gel nails, and beauty treatments in Kampala, Uganda."
-        path="/"
-      />
+      <Seo path="/" {...pageSeo['/']} />
 
       {/* ── HERO ──────────────────────────────────────────────────── */}
       <section className="relative min-h-screen flex items-center overflow-hidden" style={{ background: 'var(--bg)' }}>
@@ -98,7 +96,7 @@ export default function Home() {
             </h1>
 
             <p className="hero-text-3 text-base leading-relaxed mb-10 max-w-md" style={{ color: 'var(--text-2)' }}>
-              Step into a world of luxury nail care. Expert technicians, premium products, and stunning results — every single visit.
+              Step into a world of luxury nail care. Expert technicians, premium products, and stunning results, every single visit.
             </p>
 
             <div className="hero-text-3 flex flex-wrap gap-4">
@@ -208,7 +206,7 @@ export default function Home() {
               </h2>
               <div className="space-y-5 text-sm leading-relaxed" style={{ color: 'var(--text-2)' }}>
                 <p>The Nail Bar UG was born from a deep love of beauty and a mission to bring world-class nail artistry to Kampala. Nestled in The Cube, we created a sanctuary where every client is treated like royalty.</p>
-                <p>Our expert technicians blend artistry with precision, delivering experiences that go beyond aesthetics — they refresh the soul. From classic manicures to avant-garde nail art, your vision is our canvas.</p>
+                <p>Our expert technicians blend artistry with precision, delivering experiences that go beyond aesthetics. They refresh the soul. From classic manicures to avant-garde nail art, your vision is our canvas.</p>
               </div>
               <div className="mt-10 pt-10 flex gap-12 border-t" style={{ borderColor: 'var(--border)' }}>
                 {[['500+', 'Happy Clients'], ['6+', 'Services Offered'], ['7', 'Days a Week']].map(([v, l]) => (
@@ -242,7 +240,7 @@ export default function Home() {
                 className={`reveal-scale ${galleryInView ? 'in-view' : ''} delay-${(i % 3 + 1) * 100} group overflow-hidden rounded-2xl img-shine`}
                 style={{ aspectRatio: i === 0 || i === 5 ? '1/1' : '4/5' }}
               >
-                <img src={src} alt={`Gallery ${i + 1}`} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-spring" loading="lazy" />
+                <img src={src} alt={galleryItems.find((g) => g.image === src)?.title || 'Nail art by The Nail Bar UG'} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-spring" loading="lazy" />
               </div>
             ))}
           </div>
@@ -259,6 +257,17 @@ export default function Home() {
               </svg>
             </Link>
           </div>
+        </div>
+      </section>
+
+      {/* ── REVIEWS ───────────────────────────────────────────────── */}
+      <section className="py-32" style={{ background: 'var(--bg-elevated)' }}>
+        <div className="max-w-7xl mx-auto px-6 lg:px-12">
+          <div className="text-center mb-16">
+            <p className="text-xs tracking-[0.25em] uppercase font-medium mb-4" style={{ color: 'var(--accent)' }}>Happy Clients</p>
+            <h2 className="font-display text-5xl sm:text-6xl" style={{ color: 'var(--text-1)' }}>What They Say</h2>
+          </div>
+          <div className="commonninja_component pid-c7da764f-ee06-4eb8-a556-f22207500989" />
         </div>
       </section>
 

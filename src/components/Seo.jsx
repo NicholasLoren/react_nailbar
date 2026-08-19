@@ -1,18 +1,16 @@
 import { Helmet } from 'react-helmet-async'
-
-const SITE_URL = 'https://thenailbarug.com'
-const DEFAULT_IMAGE = `${SITE_URL}/images/7.jpg`
+import { SITE_URL, DEFAULT_IMAGE, getFullTitle, getBreadcrumbSchema } from '../data/seo'
 
 export default function Seo({
   title,
   description,
-  path = '',
+  path = '/',
   image = DEFAULT_IMAGE,
+  imageAlt,
 }) {
-  const fullTitle = title
-    ? `${title} | The Nail Bar UG`
-    : 'The Nail Bar UG — Luxury Nail Salon in Kampala'
-  const url = `${SITE_URL}${path}`
+  const fullTitle = getFullTitle(title)
+  const url = `${SITE_URL}${path === '/' ? '' : path}` || SITE_URL
+  const breadcrumbSchema = getBreadcrumbSchema(path, title)
 
   return (
     <Helmet>
@@ -26,6 +24,8 @@ export default function Seo({
       <meta property="og:title" content={fullTitle} />
       <meta property="og:description" content={description} />
       <meta property="og:image" content={image} />
+      <meta property="og:image:alt" content={imageAlt || fullTitle} />
+      <meta property="og:image:type" content="image/jpeg" />
       <meta property="og:site_name" content="The Nail Bar UG" />
       <meta property="og:locale" content="en_UG" />
 
@@ -34,6 +34,9 @@ export default function Seo({
       <meta name="twitter:title" content={fullTitle} />
       <meta name="twitter:description" content={description} />
       <meta name="twitter:image" content={image} />
+      <meta name="twitter:image:alt" content={imageAlt || fullTitle} />
+
+      <script type="application/ld+json">{JSON.stringify(breadcrumbSchema)}</script>
     </Helmet>
   )
 }

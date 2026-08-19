@@ -2,6 +2,7 @@ import { useState } from 'react'
 import Seo from '../components/Seo'
 import emailjs from '@emailjs/browser'
 import { useInView } from '../hooks/useInView'
+import { pageSeo } from '../data/seo'
 
 const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID || 'YOUR_SERVICE_ID'
 const EMAILJS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || 'YOUR_TEMPLATE_ID'
@@ -81,11 +82,7 @@ export default function Contact() {
 
   return (
     <>
-      <Seo
-        title="Book an Appointment"
-        description="Book your nail appointment at The Nail Bar UG in Kampala. Call +256 772 054 361 or fill out our online form. Open 7 days a week, 9 AM – 8 PM."
-        path="/contact"
-      />
+      <Seo path="/contact" {...pageSeo['/contact']} />
 
       {/* ── HERO ──────────────────────────────────────────────────── */}
       <section className="relative pt-40 pb-20 overflow-hidden" style={{ background: 'var(--bg)' }}>

@@ -1,6 +1,16 @@
 import { Link } from 'react-router-dom'
 
-const instagramImages = Array.from({ length: 9 }, (_, i) => `/images/${i + 8}.jpg`)
+const instagramImages = [
+  '/images/gold-charm-nude-nails-01.jpg',
+  '/images/gold-charm-nude-nails-social.jpg',
+  '/images/red-french-tip-chrome-05.jpg',
+  '/images/red-stiletto-3d-flower-nails.jpg',
+  '/images/white-french-3d-flower-03.jpg',
+  '/images/burgundy-pink-floral-nails.jpg',
+  '/images/green-gold-chrome-nails.jpg',
+  '/images/white-glitter-french-ombre-02.jpg',
+  '/images/french-white-gold-floral-02.jpg',
+]
 const quickLinks = [
   { to: '/', label: 'Home' },
   { to: '/about', label: 'About Us' },
@@ -48,13 +58,13 @@ export default function Footer() {
           {/* Brand */}
           <div className="lg:col-span-2">
             <div className="flex items-center gap-3 mb-5">
-              <img src="/images/logo.png" alt="The Nail Bar UG" className="h-9 w-auto dark:brightness-0 dark:invert" />
+              <img src="/images/nailbar_logo.png" alt="The Nail Bar UG" className="h-9 w-auto" />
               <span className="font-display text-xl tracking-wide" style={{ color: 'var(--text-1)' }}>
                 The Nail Bar <em className="not-italic text-gradient">UG</em>
               </span>
             </div>
             <p className="text-sm leading-relaxed mb-8 max-w-xs" style={{ color: 'var(--text-3)' }}>
-              Kampala's premier destination for luxury nail care and beauty — where every visit is an experience worth savoring.
+              Kampala's premier destination for luxury nail care and beauty, where every visit is an experience worth savoring.
             </p>
 
             {/* Instagram mini-grid */}
@@ -67,7 +77,7 @@ export default function Footer() {
                   rel="noopener noreferrer"
                   className="aspect-square overflow-hidden rounded-lg img-shine"
                 >
-                  <img src={src} alt="" className="w-full h-full object-cover hover:scale-110 transition-transform duration-500" loading="lazy" />
+                  <img src={src} alt={`Nail art photo ${i + 1} from The Nail Bar UG Instagram`} className="w-full h-full object-cover hover:scale-110 transition-transform duration-500" loading="lazy" />
                 </a>
               ))}
             </div>
