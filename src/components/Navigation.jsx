@@ -30,15 +30,19 @@ export default function Navigation({ darkMode, setDarkMode }) {
 
   useEffect(() => setOpen(false), [location.pathname])
 
+  useEffect(() => {
+    document.body.style.overflow = open ? 'hidden' : ''
+    return () => { document.body.style.overflow = '' }
+  }, [open])
+
   const isActive = (to) => to === '/' ? location.pathname === '/' : location.pathname.startsWith(to)
 
   return (
     <header
       className={`fixed top-0 inset-x-0 z-50 transition-all duration-500 ${
-        scrolled || open
-          ? 'glass shadow-lg shadow-black/5'
-          : 'bg-transparent'
+        open ? 'shadow-lg shadow-black/5' : scrolled ? 'glass shadow-lg shadow-black/5' : 'bg-transparent'
       }`}
+      style={{ background: open ? 'var(--bg)' : undefined }}
     >
       <nav className="max-w-7xl mx-auto px-6 lg:px-12" ref={menuRef}>
         <div className="flex items-center justify-between h-20">
@@ -102,9 +106,10 @@ export default function Navigation({ darkMode, setDarkMode }) {
 
             {/* Hamburger */}
             <button
-              className="md:hidden w-9 h-9 flex flex-col justify-center items-center gap-1.5 rounded-full"
+              className="md:hidden relative z-10 w-9 h-9 flex flex-col justify-center items-center gap-1.5 rounded-full"
               onClick={() => setOpen(!open)}
               aria-label="Menu"
+              aria-expanded={open}
             >
               <span className={`block h-px w-5 bg-current transition-all duration-300 origin-center ${open ? 'rotate-45 translate-y-[3.5px]' : ''}`} style={{ color: 'var(--text-1)' }} />
               <span className={`block h-px bg-current transition-all duration-300 ${open ? 'w-0 opacity-0' : 'w-4 opacity-100'}`} style={{ color: 'var(--text-1)' }} />
@@ -112,37 +117,43 @@ export default function Navigation({ darkMode, setDarkMode }) {
             </button>
           </div>
         </div>
-
-        {/* Mobile menu */}
-        <div
-          className={`md:hidden overflow-hidden transition-all duration-500 ease-spring ${
-            open ? 'max-h-80 opacity-100 pb-6' : 'max-h-0 opacity-0'
-          }`}
-        >
-          <div className="pt-4 flex flex-col gap-1 border-t" style={{ borderColor: 'var(--border)' }}>
-            {links.map(({ to, label }) => (
-              <Link
-                key={to}
-                to={to}
-                className="px-4 py-3 rounded-xl text-sm font-medium tracking-widest uppercase transition-colors duration-200"
-                style={{
-                  color: isActive(to) ? 'var(--accent)' : 'var(--text-2)',
-                  background: isActive(to) ? 'var(--accent-muted)' : 'transparent',
-                }}
-              >
-                {label}
-              </Link>
-            ))}
-            <Link
-              to="/contact"
-              className="mt-2 mx-4 py-3 rounded-xl text-sm font-semibold tracking-widest uppercase text-center"
-              style={{ background: 'var(--accent)', color: '#fff' }}
-            >
-              Book Now
-            </Link>
-          </div>
-        </div>
       </nav>
+
+      {/* Full-screen mobile menu */}
+      <div
+        aria-hidden={!open}
+        className={`md:hidden fixed inset-x-0 top-20 bottom-0 transition-opacity duration-300 ${
+          open ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+        }`}
+        style={{ background: 'var(--bg)' }}
+      >
+        <div className="h-full flex flex-col items-center justify-center gap-3 px-6 pb-20">
+          {links.map(({ to, label }, i) => (
+            <Link
+              key={to}
+              to={to}
+              className={`font-display text-4xl transition-all duration-500 ${open ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+              style={{
+                color: isActive(to) ? 'var(--accent)' : 'var(--text-1)',
+                transitionDelay: open ? `${i * 60}ms` : '0ms',
+              }}
+            >
+              {label}
+            </Link>
+          ))}
+          <Link
+            to="/contact"
+            className={`mt-6 px-8 py-4 rounded-full text-sm font-semibold tracking-widest uppercase transition-all duration-500 ${open ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+            style={{
+              background: 'var(--accent)',
+              color: '#fff',
+              transitionDelay: open ? `${links.length * 60}ms` : '0ms',
+            }}
+          >
+            Book Now
+          </Link>
+        </div>
+      </div>
     </header>
   )
 }
